@@ -2,8 +2,9 @@
 <html lang="th"><head>
 <meta charset="UTF-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data:; worker-src blob: data:; connect-src blob: data:; img-src blob: data:; font-src blob: data:; style-src 'unsafe-inline'; media-src 'none'; object-src 'none'; frame-src 'none'; form-action 'none'; base-uri 'none'">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>PII Redaction Tool (Offline)</title>
+<meta name="theme-color" content="#0c1a3d">
 <style>
 :root{--bg:#f4f6f9;--card:#fff;--ink:#1d2433;--mute:#6b7385;--line:#e3e7ee;--pri:#0b5cad;--pri2:#e8f1fb;--ok:#1a7f4b;--warn:#b26a00;--err:#b42318;
 --id:#fde2e1;--name:#e4ecff;--phone:#fff1d6;--email:#e2f6ea;--addr:#efe3fb;--oth:#d9f2ef;}
@@ -210,6 +211,115 @@ body.fzh .toolbar{top:70px}
 .guide{background:#eef3ff;border-radius:12px;padding:10px 14px;font-size:14px;margin:12px 0 0;color:#26335f;line-height:1.6}
 .card:has(#oStyle) .hint:not(#styleHint){display:none}
 .card:has(#oStyle) details .hint{display:block}
+
+/* ============ v18: Responsive — Mobile portrait / Tablet ============ */
+.mnav{display:none}
+.touch-only{display:none!important}
+@media (hover:none) and (pointer:coarse){.touch-only{display:inline-flex!important}.kbd{display:none}}
+#vstage.fit .vwrap,#vstage.fit .vwrap img{width:100%!important;max-width:100%!important;height:auto}
+#vstage.draw .vwrap{touch-action:none;cursor:crosshair}
+#vDraw.on{background:var(--pri);color:#fff;border-color:var(--pri)}
+
+/* --- single-column (tablet & phone): bottom nav --- */
+@media (max-width:1100px){
+  main{grid-template-columns:minmax(0,1fr)!important}
+  main>section{min-width:0}
+  select{max-width:100%;min-width:0;text-overflow:ellipsis}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+  .mnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:50;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);
+    border-top:1px solid var(--line);box-shadow:0 -6px 18px -10px rgba(20,25,43,.35);padding:6px 6px calc(6px + env(safe-area-inset-bottom))}
+  .mnav button{flex:1;border:0;background:none;font:inherit;font-size:12px;color:var(--mute);display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 2px;border-radius:10px;cursor:pointer;position:relative;min-height:48px}
+  .mnav button i{font-style:normal;font-size:20px;line-height:1}
+  .mnav button.on{color:var(--pri);background:var(--pri2);font-weight:700}
+  .mnav button:disabled{opacity:.4}
+  .mnav button.pulse::after{content:"";position:absolute;top:6px;right:calc(50% - 18px);width:9px;height:9px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 2px #fff}
+  .toast{left:12px;right:12px;bottom:calc(76px + env(safe-area-inset-bottom));text-align:center}
+  body.wide main>section:first-child{display:block}
+  #bWide{display:none}
+}
+
+/* --- phone portrait --- */
+@media (max-width:760px){
+  body{font-size:15px}
+  header{position:static;padding:10px 14px;gap:8px}
+  header>div:first-child{flex:1 1 auto;min-width:0}
+  header h1{font-size:18px}
+  header .sub{display:none}
+  .badges{margin-left:0;gap:6px;flex:0 0 auto}
+  .badges .badge:not(#bOcr){display:none}
+  #bOcr{font-size:11px;padding:4px 8px;max-width:46vw}
+  #tOcr{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .fz button{width:32px;height:28px}
+  #stepper{order:3;flex:1 1 100%;margin:2px 0 0;flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  #stepper::-webkit-scrollbar{display:none}
+  #stepper span{font-size:12px;padding:4px 9px;white-space:nowrap;flex:none}
+  #stepper span i{width:19px;height:19px;font-size:11px}
+
+  main{padding:10px;gap:10px}
+  .card{padding:14px;border-radius:14px;margin-bottom:12px}
+  .card h2{font-size:16px}
+  #drop{padding:24px 12px;font-size:15px}
+  .chk{font-size:15px;align-items:flex-start}
+  .chk input{width:22px;height:22px;flex:none;margin-top:1px}
+  .chk .tag{display:none}
+  .hint[style*="padding-left:24px"],.row[style*="padding-left:24px"],.chk[style*="padding-left:24px"]{padding-left:32px!important}
+  .row{flex-wrap:wrap}
+  .row label{flex:1 1 100%}
+  .row select,.row input[type=number]{flex:1 1 auto}
+  /* 16px+ prevents iOS auto-zoom on focus */
+  select,input[type=number],input[type=text],input[type=search],textarea,textarea.cfg{font-size:16px}
+  .actions .btn{flex:1 1 100%}
+  button.btn{padding:12px 14px}
+
+  /* result toolbar: not sticky, stacked */
+  .toolbar{position:static;margin:0 0 8px;padding:0 0 10px;background:none;backdrop-filter:none}
+  .toolbar .title{flex:1 1 100%;max-width:100%;font-size:17px;margin:0}
+  .toolbar>.btn{flex:1 1 calc(50% - 8px);padding:10px 8px;font-size:14px}
+  .expbar{flex:1 1 100%}
+  .expbar select{flex:0 0 38%}
+  .expbar .btn{flex:1}
+  .stats{gap:6px}
+  .stat{flex:1 1 calc(33.33% - 6px);min-width:0;padding:8px 10px}
+  .stat b{font-size:20px}.stat span{font-size:12px}
+
+  /* tabs */
+  #tabs{overflow-x:auto;scrollbar-width:none;gap:2px}
+  #tabs::-webkit-scrollbar{display:none}
+  #tabs .tab{flex:1 0 auto;justify-content:center;font-size:14px;padding:10px 10px;white-space:nowrap}
+
+  /* compare */
+  .cmpbar{gap:8px 12px;font-size:13px}
+  .cmpbar #bMaskOrig{flex:1 1 100%}
+  .cmpbar .legend{margin-left:0;flex:1 1 100%}
+  .cmp{gap:12px}
+  .pane #view,.pane #oview,.pane #editor{height:48vh;min-height:260px}
+  #view,#oview{font-size:15px;line-height:1.7;padding:10px}
+  .ln{padding-left:34px}.ln::before{width:26px;font-size:10px}
+  .phead{font-size:13.5px;padding:8px 10px;flex-wrap:wrap}
+  .phead small{margin-left:0;flex:1 1 100%;font-size:12px}
+  .empty{padding:40px 14px;font-size:15px}
+
+  /* review */
+  #pRev .rbar{gap:8px}
+  #pRev .rbar input[type=search]{flex:1 1 100%;min-width:0}
+  #pRevList{max-height:62vh;min-height:260px}
+  .gh{padding:10px 10px;gap:10px}
+  .gv{font-size:15.5px}
+  .gm{display:none}
+  .occs{padding:4px 0 8px 16px}
+  .occ{font-size:13.5px;gap:8px}
+  .occ .ln2{width:46px;font-size:11px}
+  .addrow input{min-width:0;flex:1 1 100%}
+
+  /* visual redaction */
+  #pVis .vbar{gap:6px}
+  #vTools>span[style]{margin-left:0!important;flex:1 1 100%;flex-wrap:wrap}
+  #vPreset{flex:1 1 100%}
+  #vPresetHint{flex:1 1 100%}
+  #vTools #vPdf,#vTools #vPng{flex:1}
+  #vstage{height:62vh;min-height:300px;padding:8px}
+  footer{padding:4px 10px 12px}
+}
 </style>
 </head>
 <body>
@@ -2893,4 +3003,75 @@ function v14Hook(){
 loadSettings();styleUi();engUi();
 ocrUi();
 })();
-</script></body></html>
+</script>
+<nav class="mnav" id="mnav" aria-label="เมนูมือถือ">
+  <button data-go="files"><i>📁</i>ไฟล์</button>
+  <button data-go="opts"><i>⚙️</i>ตั้งค่า</button>
+  <button data-go="res"><i>📄</i>ผลลัพธ์</button>
+  <button data-go="dl" id="mDl" disabled><i>⬇️</i>ดาวน์โหลด</button>
+</nav>
+<script>
+/* ===================== v18: responsive / touch helpers ===================== */
+(function(){
+  function $(id){return document.getElementById(id)}
+  var cards=document.querySelectorAll('main>section:first-child>.card');
+  var T={files:cards[1],opts:cards[2],res:document.querySelector('main>section:nth-child(2)>.card')};
+  var nav=$('mnav'),btns=nav.querySelectorAll('button');
+  nav.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||b.disabled)return;var g=b.getAttribute('data-go');
+    if(g==='dl'){$('bDl').click();return}
+    if(g==='res')b.classList.remove('pulse');
+    var el=T[g];if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+  // highlight current section
+  function hl(){
+    var y=window.innerHeight*0.35,cur='files';
+    ['files','opts','res'].forEach(function(k){if(T[k]&&T[k].getBoundingClientRect().top<y)cur=k});
+    btns.forEach(function(b){b.classList.toggle('on',b.getAttribute('data-go')===cur)});
+  }
+  window.addEventListener('scroll',hl,{passive:true});hl();
+  // mirror Download button state + notify when results arrive
+  var dl=$('bDl'),mdl=$('mDl');
+  function sync(){mdl.disabled=dl.disabled}
+  new MutationObserver(sync).observe(dl,{attributes:true,attributeFilter:['disabled']});sync();
+  var stats=$('stats'),had=false;
+  new MutationObserver(function(){
+    var has=stats.textContent.trim().length>0;
+    if(has&&!had&&window.innerWidth<=1100){
+      var r=T.res.getBoundingClientRect();
+      if(r.top>window.innerHeight*0.6)nav.querySelector('[data-go=res]').classList.add('pulse');
+    }
+    had=has;
+  }).observe(stats,{childList:true,subtree:true,characterData:true});
+
+  // visual tab: fit page image to screen width on narrow screens (zoom "พอดี")
+  var st=$('vstage'),vz=$('vZoom');
+  function fit(){st.classList.toggle('fit',window.innerWidth<=760&&vz.value==='1')}
+  vz.addEventListener('change',fit);window.addEventListener('resize',fit);fit();
+
+  // touch: draw redaction boxes with finger (toggle mode so normal scroll still works)
+  var clr=$('vClr');
+  if(clr){
+    var db=document.createElement('button');db.className='btn sm ghost touch-only';db.id='vDraw';db.textContent='✏️ โหมดลากกล่อง';
+    db.title='เปิดแล้วใช้นิ้วลากบนหน้าเอกสารเพื่อเพิ่มกล่องถมดำ (ปิดเพื่อเลื่อนดูภาพ)';
+    clr.parentNode.insertBefore(db,clr.nextSibling);
+    var draw=false,active=false;
+    db.onclick=function(){draw=!draw;db.classList.toggle('on',draw);st.classList.toggle('draw',draw);db.textContent=draw?'✏️ กำลังลากกล่อง (แตะเพื่อปิด)':'✏️ โหมดลากกล่อง'};
+    function fire(type,t,target){
+      var ev=new MouseEvent(type,{bubbles:true,cancelable:true,clientX:t.clientX,clientY:t.clientY,button:0});
+      (target||window).dispatchEvent(ev);
+    }
+    st.addEventListener('touchstart',function(e){
+      if(!draw||e.touches.length!==1)return;var t=e.touches[0];
+      if(!t.target.closest||!t.target.closest('#vwrap'))return;
+      active=true;fire('mousedown',t,t.target);
+    },{passive:true});
+    window.addEventListener('touchmove',function(e){
+      if(!active)return;e.preventDefault();fire('mousemove',e.touches[0]);
+    },{passive:false});
+    function end(e){if(!active)return;active=false;fire('mouseup',e.changedTouches[0])}
+    window.addEventListener('touchend',end);window.addEventListener('touchcancel',end);
+  }
+})();
+</script>
+</body></html>
